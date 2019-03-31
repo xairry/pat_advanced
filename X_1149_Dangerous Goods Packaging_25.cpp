@@ -35,7 +35,7 @@ int main() {
 		}	
 		for(int i=0;i<v.size();i++) {
 			for(int j=0;j<mp[v[i]].size();j++) {
-				if(a[mp[v[i]][j]] == 1)flag=1;
+				if(a[mp[v[i]][j] ] == 1)flag=1;
 			}
 		}
 		//printf("%d",flag);
