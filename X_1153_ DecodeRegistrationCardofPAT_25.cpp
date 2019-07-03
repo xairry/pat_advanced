@@ -20,9 +20,10 @@ int main() {
 	for(int i=0;i<n;++i) {
 		cin>>ori[i].t>>ori[i].val;
 	}
-	printf("haha");
+	
 	for(int i=0;i<k;i++) {
 		cin>>num>>s;
+		//Case 4: 2 999
 		printf("Case %d: %d %s\n",i+1,num,s.c_str());
 		vector<node> ans;
 		int cnt = 0,sum = 0;
