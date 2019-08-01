@@ -9,9 +9,9 @@
 #include<cmath>
 #include<cctype>
 using namespace std;
-//const int MAXV = 1000; //最大顶点数 
+//const int MAXV = 1000; /
 //const int INF = 0Xffffffff;
-const int M = 26*26*26*10;//学生数上限 
+const int M = 26*26*26*10;//
 
 vector<int> selCourse[M];
 int getid(char name[]) {
