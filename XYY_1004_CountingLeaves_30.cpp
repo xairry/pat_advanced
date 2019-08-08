@@ -1,63 +1,37 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
-#include<vector>
-#include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
+#include<cstdio>
 #include<cmath>
-#include<cctype>
-#include<queue>
+#include<algorithm>
+#include<vector>
 using namespace std;
-const int MAXN = 100010; 
-//const int INF = 0Xffffffff;
-//set<int> a[51];
-
-double r,p,ans;
-int N,M,tmp2;
-vector<int> node[MAXN];
-int leaf[MAXN],maxLevel=1;
-
-void DFS(int index,int level) {
-	if(level>maxLevel)maxLevel=level;
-	if(node[index].size()==0) {
-		leaf[level]++;
+const int maxn = 110;
+int n,m,max_h;
+int arr[maxn] = {0};
+vector<int> child[maxn];
+void dfs(int index,int depth) {
+	max_h = max(depth,max_h);
+	if(child[index].size() == 0) {
+		arr[depth]++;
 		return;
 	}
-	for(int i=0;i<node[index].size();i++) {
-		DFS(node[index][i],level+1);
+	for(int i=0;i<child[index].size();i++) {
+		dfs(child[index][i],depth+1);
 	}
 }
-
 
 int main() {
-	
-	scanf("%d %d",&N,&M);
-	if(N==0){
-		return 0;
-	}
-	int nu,ch,root;
-	for(int i=0;i<M;i++) {
-		scanf("%d%d",&root,&nu);
-		for(int j=0;j<nu;j++) {
-			scanf("%d",&ch);
-			node[root].push_back(ch);
+	scanf("%d %d",&n,&m);
+	int a,b,k;
+	for(int i=0;i<m;i++) {
+		scanf("%d %d",&a,&k);
+		for(int j=0;j<k;j++) {
+			scanf("%d", &b);
+			child[a].push_back(b);
 		}
+		
 	}
-	DFS(1,1);
-	printf("%d",leaf[1]);
-	for(int i=2;i<=maxLevel;i++) {
-		printf(" %d",leaf[i]);
-	}
-	
-	
+	dfs(1,1);
+	printf("%d",arr[1]);
+	for(int i=2;i<=max_h;i++)printf(" %d",arr[i]);
 
-	
-	
 	return 0;
 }
-	
-
-
-

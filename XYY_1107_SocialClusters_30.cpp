@@ -1,66 +1,53 @@
-#include<stdio.h>
+#include<cstdio>
 #include<algorithm>
+
 using namespace std;
-const int MAXN=1010;
-int N;
-int father[MAXN],isroot[MAXN] = {0},course[MAXN] = {0};
-bool cmp(int a,int b) {
-	return a>b;
-}
-void init(int N){
-	for(int i=1;i<=N;i++) {
-		father[i] = i;
-		isroot[i] = false;
-	}
+const int maxn = 1010;
+int fa[maxn],isRoot[maxn]={0},hobby[maxn]={0};
+
+int findFather(int x) {
+	if(x == fa[x])return x;
+	else return findFather(fa[x]);
 }
 
-int findfather(int x) {
-	int a=x;
-	while(x!=father[x]){
-		x=father[x];
-	}
+bool merge(int a,int b) {
+	int faA = findFather(a),faB = findFather(b);
+	if (faA==faB) return false;
+	if(faA > faB)swap(faA,faB);
+	fa[faA] = faB;
 }
-
-void Union(int a,int b) {
-	int faA = findfather(a);
-	int faB = findfather(b);
-	if(faA!=faB) {
-		father[faA] = faB;
-	}
+bool cmp(int &a,int &b){
+	return a > b;
 }
-
 int main() {
-	scanf("%d",&N);
-	int K=0,a,b;
-	init(N);
-	for(int i=0;i<N;i++) {
-		scanf("%d:",&K);
-		for(int j=0;j<K;j++) {
-			scanf("%d",&a);
-			if(course[a]==0){
-				course[a]=i;
+	int n,k,h;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++) {
+		isRoot[i]=0;
+		fa[i] = i;
+	}
+	for(int i=1;i<=n;i++) {
+		scanf("%d: ",&k);
+		for(int j=0;j<k;j++) {
+			scanf("%d",&h);
+			if(hobby[h]==0) {
+				hobby[h] = i;
 			}
-			Union(i,findfather(course[a]));
-			
+			merge(i,hobby[h]);
 		}
 	}
-	for(int i=1;i<=N;i++) {
-		isroot[findfather(i)]++;
+	for(int i=1;i<=n;i++) {
+		isRoot[findFather(i)]++;
 	}
-	int ans=0;
-	for(int i=1;i<=N;i++) {
-		if(isroot[i]!=0){
-			ans++;
-		}
+	int ans = 0;
+	for(int i=1;i<=n;i++) {
+		if(isRoot[i]!=0)ans++;
 	}
 	printf("%d\n",ans);
-	sort(isroot+1,isroot+N+1,cmp);
+	sort(isRoot +1,isRoot+n+1,cmp);
 	for(int i=1;i<=ans;i++) {
-		printf("%d",isroot[i]);
+		printf("%d",isRoot[i]);
 		if(i<ans)printf(" ");
 	}
-
-	
-	
 	return 0;
 }

@@ -10,9 +10,7 @@
 #include<cctype>
 #include<queue>
 using namespace std;
-//const int MAXV = 1000; //最大顶点数 
-//const int INF = 0Xffffffff;
-//set<int> a[51];
+
 
 const int MAX = 50;
 int pre[MAX],in[MAX],post[MAX];
@@ -24,21 +22,16 @@ struct node {
 };
 
 node* create(int preL,int preR,int inL,int inR) {
-	if(preL > preR) {
-		return NULL;
-	}
-	int k;
-	node *root= new node;
+	if(preL > preR)return NULL;
+	node *root = new node;
 	root->data = pre[preL];
-	for(k=inL;k<inR;k++) {
-		if(in[k] == pre[preL]) {
-			break;
-		}
+	int k;
+	for(k = inL;k<inR;k++) {
+		if(in[k]==pre[preL])break;
 	}
 	int numLeft = k-inL;
 	root->lchild = create(preL+1,preL+numLeft,inL,k-1);
 	root->rchild = create(preL+numLeft+1,preR,k+1,inR);
-	return root;
 } 
 int num=0;
 

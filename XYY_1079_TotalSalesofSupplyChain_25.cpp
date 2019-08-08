@@ -1,62 +1,45 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
-#include<vector>
+#include<cstdio>
 #include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
 #include<cmath>
-#include<cctype>
-#include<queue>
+#include<vector>
 using namespace std;
-const int MAXN = 100010; //最大顶点数 
-//const int INF = 0Xffffffff;
-//set<int> a[51];
+const int maxn = 100010;
+int n,k,tp1,tp2;
+double p,r,sum = 0.0;
 
-
-int N;
-double p,r,ans=0.0;
-	
-	
-struct Node {
-	double data;
+struct node{
+	double val;
 	vector<int> child;
-}node[MAXN];
+}Node[maxn];
 
-void DFS(int index,int depth) {
-	if(node[index].child.size()==0) {
-		ans+=node[index].data*pow(1+r,depth);
-		return ;
+void dfs(int depth,int root) {
+	if(Node[root].child.size() == 0) {
+		sum += Node[root].val*p*pow(1+r,depth);
+		return; 
 	}
-	for(int i=0;i<node[index].child.size();i++) {
-		DFS(node[index].child[i],depth+1);
+	for(int i=0;i<Node[root].child.size();i++) {
+		dfs(depth+1,Node[root].child[i]);
 	}
 }
 
 int main() {
 	
-	scanf("%d %lf %lf",&N,&p,&r);
-	r/=100;
-	int tp1,tp2;
-	for(int i=0;i<N;i++) {
+	scanf("%d %lf %lf",&n,&p,&r);
+	r /= 100;
+	for(int i=0;i<n;i++) {
 		scanf("%d",&tp1);
-		if(tp1 ==0) {
-			scanf("%lf",&node[i].data);
-		}else {
+		if(tp1 == 0) {
+			scanf("%lf",&Node[i].val);
+		}else{
 			for(int j=0;j<tp1;j++) {
 				scanf("%d",&tp2);
-				node[i].child.push_back(tp2);
+				Node[i].child.push_back(tp2);
 			}
+			
 		}
+		
 	}
-	DFS(0,0);
-	printf("%.1f\n",p*ans);
-	
-	
-	return 0;
+	dfs(0,0);
+		printf("%.1f\n",sum);
+		return 0;
 }
-	
-
-
-

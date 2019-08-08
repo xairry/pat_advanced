@@ -1,80 +1,54 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
-#include<vector>
+#include<cstdio>
 #include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
-#include<cmath>
-#include<cctype>
-#include<queue>
+
 using namespace std;
 
-const int MAX = 50;
-int post[MAX],in[MAX],pre[MAX];
-int N;
-
-struct node {
-	int data;
-	node* lchild,*rchild;
-};
-
-node* create(int postL,int postR,int inL,int inR) {
-	if(postL > postR) {
-		return NULL;
-	}
-	node* root = new node;
-	root->data = post[postR];
-	int k;
-	for(k=inL;k<inR;k++) {
-		if(in[k] == post[postR]) {
-			break;
-		}
-	}
-	int numLeft = k - inL;
-	root->lchild = create(postL,postL+numLeft -1,inL,k-1);
-	root->rchild = create(postL+numLeft,postR-1,k+1,inR);
-	return root;
-} 
-int num=0;
-void BFS(node* root) {
-	queue<node*> q;
-	q.push(root);
-	while(!q.empty()){
-		node* tmp = q.front();
-		q.pop();
-		printf("%d",tmp->data);
-		num++;
-		if(num<N) printf(" ");
-		if(tmp->lchild != NULL) q.push(tmp->lchild);
-		if(tmp->rchild != NULL) q.push(tmp->rchild);
-	}
-	
-	
+struct Node{
+    int val;
+    Node *left;
+    Node *right;
 }
 
+int in[50],post[50],pre[50];
+int n;
+Node* create(int postL,int postR,int inL,int inR) {
+    if(postL>postR)return NULL;
 
+    Node *root = new Node;
+    root->val = post[postR];
+    int k;
+    for(k=inL,k<inR;k++) {
+        if(in[k] == post[postR]) {
+            break;
+        }
+    }
+    int numLeft = k-inL;
+    root->left = create(postL,postL+numLeft-1,inL,k-1);
+    root->right = create(postL+numLeft,postR-1,k+1,inR);
+}
+void bfs(Node *root) {
+    queue<Node*> q;
+    q.push(root);
+    while(!q.empty()) {
+        Node *top = q.front();
+        q.pop();
+        printf("%d",top->val);
+        num++;
+        if(num<n)printf(" ");
+        if(top->left!=NULL) q.push(top->left);
+        if(top->right!=NULL)q.push(top->right);
+    }
+}
 int main() {
-	
-	scanf("%d",&N);
-	
-	for(int i=0;i<N;i++) {
-		scanf("%d",&post[i]);
-	}
-	for(int i=0;i<N;i++) {
-		scanf("%d",&in[i]);
-	}
-	node* ans = create(0,N-1,0,N-1);
-	BFS(ans);
-	return 0;
-	
-	
-
-
-	return 0;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++) {
+        scanf("%d",&post[i]);
+    }
+    
+    for(int i=0;i<n;i++) {
+        scanf("%d",&in[i]);
+    }
+    Node *root = create(0,n-1,0,n-1);
+    bfs(root);
+    return 0;
 }
-	
-
-
-

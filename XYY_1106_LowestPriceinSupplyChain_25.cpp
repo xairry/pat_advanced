@@ -1,65 +1,48 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
 #include<vector>
+#include<cstdio>
 #include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
 #include<cmath>
-#include<cctype>
-#include<queue>
 using namespace std;
-const int MAXN = 100010; 
-//const int INF = 0Xffffffff;
-//set<int> a[51];
+const int maxn = 100010;
+const int inf = 1e9+10;
+int n,cnt=0;
+double p,r;
+vector<int> node[maxn];
+double ans = inf;
 
-double r,p,ans;
-int N,M,tmp2;
-vector<int> node[MAXN];
-int minlevel=MAXN,cnt=0;
-void DFS(int index,int level) {
-	
-	if(node[index].size() == 0){
-		if(level<minlevel){
-			minlevel=level;
-			cnt=1;
-		}else if(level==minlevel){
+void dfs(int index,int depth) {
+	if(node[index].size() == 0) {
+		double tt = p*pow(1+r,depth);
+		if(tt < ans){
+			ans = tt;
+			cnt = 1;
+		}else if(tt == ans) {
 			cnt++;
 		}
-		return ;
+		return;
+
 	}
 	for(int i=0;i<node[index].size();i++) {
-		DFS(node[index][i],level+1);
+		dfs(node[index][i],depth+1);
 	}
 }
-
 
 int main() {
-	
-	scanf("%d %lf %lf",&N,&p,&r);
-	r/=100;
-	int ch;
-	for(int i=0;i<N;i++) {
-		scanf("%d",&M);
-		if(M!=0){
-			for(int j=0;j<M;j++) {
-			scanf("%d",&ch);
-			node[i].push_back(ch);
+	scanf("%d %lf %lf",&n,&p,&r);
+	r /= 100;
+	int tp1,k;
+	for(int i=0;i<n;i++) {
+		scanf("%d",&tp1);
+		if(tp1 > 0) {
+			
+			for(int j=0;j<tp1;j++) {
+				scanf("%d",&k);
+				node[i].push_back(k);
+			}
 		}
-		}
-		
 	}
-	DFS(0,0);
-	ans = p*pow(1+r,minlevel);
-	printf("%.4f %d",ans,cnt);
-	
+	dfs(0,0);
+	printf("%.4f %d\n",ans,cnt);
 
-	
-	
 	return 0;
 }
-	
-
-
-

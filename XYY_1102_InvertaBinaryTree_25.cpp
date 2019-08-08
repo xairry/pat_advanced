@@ -1,104 +1,73 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
-#include<vector>
+#include<cstdio>
 #include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
-#include<cmath>
-#include<cctype>
 #include<queue>
 using namespace std;
-
-const int MAX = 110;
-int pre[MAX],in[MAX],post[MAX];
-int N;
-
+const int maxn = 110;
+int n,num = 0;
 struct node {
-	int lchild,rchild;
-}Node[MAX];
-bool notRoot[MAX] = {false}; 
-
-
-int num=0;
+	int left,right;
+}Node[maxn];
+bool notRoot[maxn] = {false};
 void print(int id) {
 	printf("%d",id);
 	num++;
-	if(num<N){
-		printf(" ");
-	}else{
-		printf("\n");
-	}
+	if(num < n)printf(" ");
+	else printf("\n");
 }
-void BFS(int root) {
+void inOrder(int root) {
+	if(root == -1)return ;
+	inOrder(Node[root].left);
+	print(root);
+	inOrder(Node[root].right);
+}
+void postOrder(int root) {
+	if(root == -1)return;
+	postOrder(Node[root].left);
+	postOrder(Node[root].right);
+	swap(Node[root].left,Node[root].right);
+}
+
+void bfs(int root) {
 	queue<int> q;
 	q.push(root);
-	while(!q.empty()){
-		int tmp = q.front();
+	while(!q.empty()) {
+		int now = q.front();
 		q.pop();
-		print(tmp);
-	
-		if(Node[tmp].lchild != -1) q.push(Node[tmp].lchild);
-		if(Node[tmp].rchild != -1) q.push(Node[tmp].rchild);
+		print(now);
+		if(Node[now].left!=-1)q.push(Node[now].left);
+		if(Node[now].right!=-1)q.push(Node[now].right);
 	}
 }
 
-void inT(int root) {
-	if(root==-1){
-		return ;
-	}
-	inT(Node[root].lchild);
-	print(root);
-	
-	inT(Node[root].rchild);
-	
-	
-}
 
-void postT(int root) {
-	if(root== -1) {
-		return ;
-	}
-	postT(Node[root].lchild);
-	postT(Node[root].rchild);
-	swap(Node[root].lchild,Node[root].rchild);
-}
-
-int strToNum(char a) {
-	if(a=='-') return -1;
+int str2n(char c) {
+	if(c == '-') return -1;
 	else {
-		notRoot[a-'0'] =true;
-		return a-'0';
+		notRoot[c-'0'] = true;
+		return c-'0';
 	}
 }
+
 int findRoot() {
-	for(int i=0;i<N;i++) {
-		if(notRoot[i]==false){
+	for(int i=0;i<n;i++) {
+		if(notRoot[i] == false) {
 			return i;
 		}
 	}
 }
-
-
 int main() {
-	char lchild,rchild;
-	scanf("%d",&N);
-	for(int i=0;i<N;i++) {
-		scanf("%*c%c %c",&lchild,&rchild);
-		Node[i].lchild=strToNum(lchild);
-		Node[i].rchild=strToNum(rchild);
-	}
-	int root =findRoot();
-	postT(root);
-	BFS(root);
-	num=0;
-	
-	inT(root);
-	
+	scanf("%d",&n);
+	char left,right;
+	for(int i=0;i<n;i++) {
+			scanf("%*c%c %c",&left,&right);
+			Node[i].left = str2n(left);
+			Node[i].right=str2n(right);
+		}
+	int root = findRoot();
+	postOrder(root);
+	bfs(root);
+	num = 0;
+	inOrder(root);
+
 	return 0;
 }
-	
-
-
-

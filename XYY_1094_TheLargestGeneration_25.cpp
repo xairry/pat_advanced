@@ -1,61 +1,38 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
-#include<vector>
-#include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
+#include<cstdio>
 #include<cmath>
-#include<cctype>
-#include<queue>
+#include<algorithm>
+#include<vector>
 using namespace std;
-const int MAXN = 110; 
-//const int INF = 0Xffffffff;
-//set<int> a[51];
+const int maxn = 110;
+int n,m;
+vector<int> Node[maxn];
+int hashTable[maxn] = {0};
 
-double r,p,ans;
-vector<int> child[MAXN];
-int cntlevel[MAXN];
-void DFS(int root,int depth) {
-	cntlevel[depth]++;
-	if(child[root].size()==0){
-		return ;
-		
-	}
-	for(int i=0;i<child[root].size();i++) {
-		DFS(child[root][i],depth+1);
+void dfs(int index,int level) {
+	hashTable[level]++;
+	for(int i=0;i<Node[index].size();i++) {
+		dfs(Node[index][i],level+1);
 	}
 }
-
 int main() {
-	int N,M,tmp2;
-	scanf("%d %d",&N,&M);
-
-	for(int i=0;i<M;i++) {
-		int tmp=0,nt=0;
-		scanf("%d %d",&tmp,&nt);
-		for(int j=0;j<nt;j++) {
-			scanf("%d",&tmp2);
-			child[tmp].push_back(tmp2);
+	int pa,k,chi;
+	scanf("%d %d",&n,&m);
+	for(int i=0;i<m;i++) {
+		scanf("%d %d",&pa,&k);
+		for(int j=0;j<k;j++) {
+			scanf("%d",&chi);
+			Node[pa].push_back(chi);
 		}
 	}
-	DFS(1,1);
-	int maxlevel=-1,maxnum=0;
-	for (int i=0;i<MAXN;i++) {
-		if(cntlevel[i]>maxnum){
-			maxnum=cntlevel[i];
-			maxlevel=i;
+	dfs(1,1);
+	int maxlevel = -1,maxval = 0;
+	for(int i=1;i<maxn;i++) {
+		if(hashTable[i] > maxval) {
+			maxval = hashTable[i];
+			maxlevel = i;
 		}
 	}
-	printf("%d %d",maxnum,maxlevel);
-	
+	printf("%d %d\n",maxval,maxlevel);
 
-	
-	
 	return 0;
 }
-	
-
-
-

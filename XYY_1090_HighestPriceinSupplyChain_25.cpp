@@ -1,60 +1,42 @@
- #include<iostream>
-#include <stdio.h>
-#include <cstring>
-#include<vector>
+#include<cstdio>
 #include<algorithm>
-#include<stack>
-#include<set>
-#include<map>
 #include<cmath>
-#include<cctype>
-#include<queue>
+#include<vector>
+
+
 using namespace std;
-const int MAXN = 100010; 
-//const int INF = 0Xffffffff;
-//set<int> a[51];
-int N;
-double r,p,ans;
-struct Node{
-	vector<int> child;
-}node[MAXN];
-int cnt=0,maxdep=0;
-void DFS(int index,int depth){
-	if(node[index].child.size()==0){
-		if(depth>maxdep){
-			cnt=1;
-			maxdep=depth;
-		}else if(depth==maxdep){
-			cnt++;
+const int maxn = 100010;
+vector<int> child[maxn];
+double p,r;
+int n,maxD = 0,num = 0;
+
+void dfs(int index, int depth) {
+	if(child[index].size() == 0) {
+		if(depth > maxD) {
+			maxD = depth;
+			num=1;
+		}else if(maxD == depth) {
+			num++; 
 		}
-		
-		return;
+		return ;
 	}
-	for(int i=0;i<node[index].child.size();i++) {
-		DFS(node[index].child[i],depth+1);
+	for(int i=0;i<child[index].size();i++) {
+		dfs(child[index][i],depth+1);
 	}
 }
-
 int main() {
-	scanf("%d %lf %lf",&N,&p,&r);
+	scanf("%d %lf %lf",&n,&p,&r);
 	r/=100;
 	int tp1,tp2,root;
-	for(int i=0;i<N;i++) {
+	for(int i=0;i<n;i++) {
 		scanf("%d",&tp1);
-		if(tp1==-1){
-			root=i;
-		}
-		node[tp1].child.push_back(i);
-		
+		if(tp1 == -1) {
+			root = i;
+		}else{
+      child[tp1].push_back(i);
+    }
 	}
-	DFS(root,0);
-	printf("%.2f %d",p*pow(1+r,maxdep),cnt);
-
-	
-	
+  dfs(root,0);
+  printf("%.2f %d\n",p*pow(1+r,maxD),num);
 	return 0;
 }
-	
-
-
-
