@@ -1,61 +1,54 @@
-#include<stdio.h>
+#include<cstdio>
 #include<algorithm>
+#include<cmath>
 #include<queue>
+#include<vector>
 using namespace std;
-const int MAXN=101;
-int N,sq1[MAXN],in[MAXN],num=0;
-
-struct Node{
-	int data;
+const int maxn = 110;
+struct node{
+	int val;
 	int left,right;
-}node[MAXN];
+}Node[maxn];
+
+int n,in[maxn],num = 0;
 
 void inorder(int root) {
-	if(root == -1)return ;
-	inorder(node[root].left);
-	node[root].data=in[num++];
-	inorder(node[root].right);
+	if(root == -1)return;
+	inorder(Node[root].left);
+	Node[root].val = in[num++];
+	inorder(Node[root].right);
 }
-void BFS(int root) {
+
+void bfs(int root) {
 	queue<int> q;
 	q.push(root);
-	int num=0;
-	
-	while(!q.empty()){
+	num = 0;
+	while(!q.empty()) {
 		int now = q.front();
 		q.pop();
-		printf("%d",node[now].data);
+		printf("%d",Node[now].val);
 		num++;
-		if(num<N)printf(" ");
-		if(node[now].left!=-1){
-			q.push(node[now].left);
-		}
-		if(node[now].right!=-1){
-			q.push(node[now].right);
-		}
+		if(num<n)printf(" ");
+		if(Node[now].left!=-1)q.push(Node[now].left);
+		if(Node[now].right!=-1)q.push(Node[now].right);
 	}
 }
 
-
 int main() {
-	scanf("%d",&N);
-	int tp1,tp2;
-	for(int i=0;i<N;i++) {
-		scanf("%d%d",&tp1,&tp2);
-		
-			node[i].left=tp1;
-		
-			node[i].right=tp2;
-	
+	int lc,rc;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++) {
+		scanf("%d%d",&lc,&rc);
+		Node[i].left = lc;
+		Node[i].right = rc;
 	}
-	for(int i=0;i<N;i++) {
+	for(int i=0;i<n;i++) {
 		scanf("%d",&in[i]);
 	}
-	
-	sort(in,in+N);
+	sort(in,in+n);
 	inorder(0);
-
-	BFS(1);
-	
+	bfs(0);
 	return 0;
+
+	
 }

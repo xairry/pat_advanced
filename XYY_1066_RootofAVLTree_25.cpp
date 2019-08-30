@@ -1,106 +1,98 @@
-#include<stdio.h>
+#include<cstdio>
 #include<algorithm>
+#include<vector>
+
 using namespace std;
-const int MAXN=21;
-int N,ans[MAXN];
 
 struct node{
 	int v,height;
-	node*left,*right;
-};
-node *root;
+	node *left,*right;
+} *root;
 
 node* newNode(int v) {
-	node * Node=new node;
-	Node->v=v;
-	Node->height=1;
-	Node->left=Node->right=NULL;
+	node* Node = new node;
+	Node->v = v;
+	Node->height = 1;
+	Node->left = Node->right = NULL;
 	return Node;
 }
-int getHeight(node* root) {
+
+int getH(node* root) {
 	if(root == NULL) return 0;
 	return root->height;
 }
 
-void updateHeight(node* root) {
-	root->height=max(getHeight(root->left),getHeight(root->right))+1;
+void updateH(node* root) {
+	root->height = max(getH(root->left),getH(root->right))+1;
 }
 
-int getBalanceFa(node* root){
-	return getHeight(root->left)-getHeight(root->right);
+int getBF(node* root) {
+	return getH(root->left)-getBF(root->right);
 }
 
-void L(node* &root) {
-	node *tmp = root->right;
-	root->right=tmp->left;
-	tmp->left=root;
-	updateHeight(root);
-	updateHeight(tmp);
-	root = tmp;
+void L(node* root) {
+	node* temp = root->right;
+	root->right = temp->left;
+	temp->left = root;
+	updateH(root);
+	updateH(temp);
+	root = temp;
 }
 
-void R(node* &root) {
-	node *tmp = root->left;
-	root->left=tmp->right;
-	tmp->right=root;
-	updateHeight(root);
-	updateHeight(tmp);
-	root = tmp;
+void R(node* root) {
+	node* temp = root->left;
+	root->left = temp->right;
+	temp->right = root;
+	updateH(root);updateH(temp);
+	root = temp;
 }
 
-void insert(node* &root,int x) {
-	if(root==NULL){
-		
-		root = newNode(x);
+void insert(node* &root, int v) {
+	if(root == NULL) {
+		root = newNode(v);
 		return;
 	}
-	if(x<root->v){
-		insert(root->left,x);
-		updateHeight(root);
-		if(getBalanceFa(root) == 2) {
-			if(getBalanceFa(root->left)==1){
+	if(v < root->v) {
+		insert(root->left,v);
+		updateH(root);
+		if(getBF(root) == 2) {
+			if(getBF(root->left) == 1) {
 				R(root);
-				
-			}
-			else if(getBalanceFa(root->left)==-1) {
+			}else if(getBF(root->left)==-1) {
 				L(root->left);
 				R(root);
 			}
 		}
-	}else{
-		insert(root->right,x);
-		updateHeight(root);
-		if(getBalanceFa(root) == -2) {
-			if(getBalanceFa(root->right)==1){
-				R(root->right);
+	}else {
+		insert(root->right,v);
+		updateH(root);
+		if(getBF(root) == -2) {
+			if(getBF(root->right)==-1) {
 				L(root);
-				
-			}
-			else if(getBalanceFa(root->right)==-1) {
+			}else if(getBF(root->right)==1) {
+				R(root->right);
 				L(root);
 			}
 		}
 	}
 }
 
-node* Create(int data[],int n) {
-	root = NULL;
+node* create(int data[],int n) {
+	node* root = NULL;
 	for(int i=0;i<n;i++) {
 		insert(root,data[i]);
 	}
 	return root;
 }
 
-
 int main() {
-	scanf("%d",&N);
-	for(int i=0;i<N;i++) {
-		scanf("%d",&ans[i]);
-		//insert(root,ans[i]);
+	int n,v;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++) {
+		scanf("%d",&v);
+		insert(root,v);
 	}
-	
-	Create(ans,N);
-	//printf(" haha");
 	printf("%d\n",root->v);
+
 	return 0;
- }
+}

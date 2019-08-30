@@ -1,96 +1,84 @@
-#include<stdio.h>
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
 #include<vector>
+
 using namespace std;
-const int MAX=1e3+1;
-int N;
 
-struct Node{
-	int data;
-	Node* lchild,*rchild;
+struct node{
+    int val;
+    node* left;
+    node* right;
 };
+int n,data;
 
-
-void insert(Node *&root,int x) {
-	if(root == NULL) {
-	root = new Node;
-	root->data=x;
-	root->lchild=root->rchild=NULL;
-		return;
-	}else if(x < root->data){
-		insert(root->lchild,x);
-	}else{
-		insert(root->rchild,x);
-	}
+void insert(node* &root,int x) {
+    if(root == NULL) {
+        root = new node;
+        root->val = x;
+        root->left = root->right = NULL;
+        return;
+    }
+    if(x < root->val) insert(root->left,x);
+    else insert(root->right,x);
 }
 
-
-void preOrder(Node* root,vector<int>& vi) {
-	if(root==NULL) return;
-	vi.push_back(root->data);
-	preOrder(root->lchild,vi);
-	preOrder(root->rchild,vi);
+void preorder(node* root,vector<int>& vi) {
+    if(root == NULL) return;
+    vi.push_back(root->val);
+    preorder(root->left,vi);
+    preorder(root->right,vi);
 }
 
-void preMOrder(Node* root,vector<int>& vi) {
-	if(root==NULL) return;
-	vi.push_back(root->data);
-	preMOrder(root->rchild,vi);
-	preMOrder(root->lchild,vi);
+void preorderM(node* root,vector<int>& vi) {
+    if(root == NULL) return;
+    vi.push_back(root->val);
+    preorderM(root->right,vi);
+    preorderM(root->left,vi);
+}
+void postorder(node* root,vector<int>& vi) {
+    if(root==NULL) return;
+        postorder(root->left,vi);
+        postorder(root->right,vi);
+        vi.push_back(root->val);
+    
 }
 
-void postOrder(Node* root,vector<int>& vi) {
-	if(root==NULL) return;
-
-	postOrder(root->lchild,vi);
-	postOrder(root->rchild,vi);
-	vi.push_back(root->data);
+void postorderM(node* root,vector<int>& vi) {
+    if(root==NULL) return;
+        postorderM(root->right,vi);
+        postorderM(root->left,vi);
+        vi.push_back(root->val);
+    
 }
-
-void postMOrder(Node* root,vector<int>& vi) {
-	if(root==NULL) return;
-
-	postMOrder(root->rchild,vi);
-	postMOrder(root->lchild,vi);
-	vi.push_back(root->data);
-}
-
-vector<int> ori,pre,preM,post,postM;
+vector<int> origin,pre,preM,post,postM;
 int main() {
-	Node *root = NULL;
-	int tmp;
-	scanf("%d",&N);
-	for(int i=0;i<N;i++) {
-		scanf("%d",&tmp);
-		ori.push_back(tmp);
-		insert(root,tmp);
-	}
-
-	
-	preOrder(root,pre);
-	preMOrder(root,preM);
-	postOrder(root,post);
-	postMOrder(root,postM);
-	
-	
-	if(ori==pre){
-		printf("YES\n");
-		for(int i=0;i<post.size();i++) {
-			printf("%d",post[i]);
-			if(i<post.size()-1){
-				printf(" ");
-			}
-		}
-	}else if(ori == preM){
-		printf("YES\n");
-		for(int i=0;i<postM.size();i++) {
-			printf("%d",postM[i]);
-			if(i<postM.size()-1){
-				printf(" ");
-			}
-		}
-	}else{
-		printf("NO\n");
-	}
-	
-	return 0;
+	scanf("%d",&n);
+    
+    node* root = NULL;
+    for(int i=0;i<n;i++) {
+        scanf("%d",&data);
+        origin.push_back(data);
+        insert(root,data);
+    }
+    preorder(root,pre);
+    preorderM(root,preM);
+    postorder(root,post);
+    postorderM(root,postM);
+    if(origin == pre) {
+        printf("YES\n");
+        for(int i=0;i<post.size();i++) {
+            printf("%d",post[i]);
+            if(i<post.size()-1)printf(" ");
+        }
+    }else if(origin == preM) {
+        printf("YES\n");
+        for(int i=0;i<postM.size();i++) {
+            printf("%d",postM[i]);
+            if(i<postM.size()-1)printf(" ");
+        }
+    }else{
+        printf("NO\n");
+    }
+    return 0;
 }

@@ -10,6 +10,9 @@ int hashTable[maxn] = {0};
 
 void dfs(int index,int level) {
 	hashTable[level]++;
+	if(Node[index].size()==0){
+		return;
+	}
 	for(int i=0;i<Node[index].size();i++) {
 		dfs(Node[index][i],level+1);
 	}

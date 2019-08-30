@@ -1,31 +1,30 @@
-#include<stdio.h>
-#include<queue>
-#include<vector>
+#include<cstdio>
 #include<algorithm>
+#include<vector>
+#include<queue>
 using namespace std;
-const int MAXN=2020;
-int N,tmp[MAXN],CBT[MAXN],index=0;
+const int maxn = 1010;
+int n,number[maxn],cbt[maxn] ,index = 0;
 
-void inorder(int root){
-	if(root>N)return;
+void inorder(int root) {
+	if(root > n)return;
 	inorder(root*2);
-	CBT[root] = tmp[index++];
-	inorder(root*2+1);
+    cbt[root] = number[index++];
+    inorder(root*2+1);
 }
 
 int main() {
-	scanf("%d",&N);
 	
-
-	for(int i=0;i<N;i++) {
-		scanf("%d",&tmp[i]);
+	scanf("%d",&n);
+    for(int i=0;i<n;i++) {
+		scanf("%d",&number[i]);
+		
 	}
-	sort(tmp,tmp+N);
-	inorder(1);
-	for(int i=1;i<=N;i++) {
-		printf("%d",CBT[i]);
-		if(i<N) printf(" ");
-	}
-	
+    sort(number,number+n);
+    inorder(1);
+    for(int i=1;i<=n;i++) {
+        printf("%d",cbt[i]);
+        if(i<n) printf(" ");
+    }
 	return 0;
 }
