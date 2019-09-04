@@ -1,83 +1,70 @@
-#include<stdio.h>
-#include<string>
+#include<cstdio>
 #include<algorithm>
 #include<vector>
 #include<cstring>
-#include<set>
 using namespace std;
-const int maxn = 510,inf=1e6;
-int n,m,st,ed,num[maxn];
-int g[maxn][maxn];
-int res[maxn],d[maxn],r[maxn];
-int maxres=0;
-bool vis[maxn]={false};
-set<int> pre[maxn];
-vector<int> tmpPath,path;
+const int maxn = 550;
+const int INF = 1e9;
+int G[maxn][maxn];
+int wei[maxn],num[maxn];
+int d[maxn],weight[maxn];
+bool vis[maxn] = {false};
+int N,M,C1,C2;
 
-struct Node{
-	int v,dis;
-	Node(int _a,int _b):v(_a),dis(_b){
-	}
-};
-vector<Node> adj[maxn];
-void BF(int s) {
-	
-	fill(d,d+maxn,inf);
-	memset(num,0,sizeof(num));
-	memset(r,0,sizeof(r));
-	num[s]=1;
-	d[s]=0;
-	r[s]=res[s];
-	for(int i=0;i<n-1;i++) {
-		for(int u=0;u<n;u++) {
-			for(int j=0;j<adj[u].size();j++) {
-				int v = adj[u][j].v;
-				int dis = adj[u][j].dis;
-				if(d[u]+dis <d[v]){
-					d[v] = d[u]+dis;
-					r[v] = r[u] + res[v];
-					num[v] = num[u];
-					pre[v].clear();
-					pre[v].insert(u);
-				}else if(d[u] + dis == d[v]) {
-					if(r[u] + res[v] > r[v]){
-						r[v] = r[u] + res[v];
-					}
-					pre[v].insert(u);
-					num[v] = 0;
-					set<int>::iterator it;
-					for(it=pre[v].begin();it!=pre[v].end();it++) {
-						num[v] += num[*it];
-					}
-				}
-			}
-		}
-	}
+void dji(int s) {
+  fill(d,d+maxn,INF);
+  memset(num,0,sizeof(num));
+  memset(wei,0,sizeof(wei));
+  d[s] = 0;
+  wei[s] = weight[s];
+  num[s] = 1;
+  
+  for(int i=0;i<N;i++) {
+    int u = -1,MIN = INF;
+    for(int j=0;j<N;j++) {
+      if(vis[j] == false && d[j] < MIN) {
+        u = j;
+        MIN = d[j];
+      }
+    }
+    if(u == -1)return ;
+    vis[u] = true;
+    for(int v=0;v<N;v++) {
+      if(G[u][v] != INF && vis[v] == false) {
+        if(d[u]+G[u][v] < d[v]) {
+          d[v] = d[u] + G[u][v];
+          wei[v] = wei[u] + weight[v];
+          num[v] = num[u];
+        }else if(d[u] + G[u][v] == d[v]) {
+          if(wei[v] < wei[u]+weight[v]) {
+            wei[v] = wei[u] + weight[v];
+          }
+          num[v] += num[u];
+        }
+        
+      }
+    }
+  }
+
+
 }
-
-
-
 
 int main() {
-	scanf("%d %d %d %d",&n,&m,&st,&ed);
-	
-	for(int i=0;i<n;i++) {
-		scanf("%d",&res[i]);
-	}
-	int c1,c2,c3;
-	fill(g[0],g[0]+maxn*maxn,inf);
-	for(int i=0;i<m;i++) {
-		scanf("%d %d %d",&c1,&c2,&c3);
-		adj[c1].push_back(Node(c2,c3));
-		adj[c2].push_back(Node(c3,c2));
-	}
-	
-	
-	BF(st);
-	
-	//DFS(ed);
-	printf("%d %d",num[ed],r[ed]);
+  
+  scanf("%d %d %d %d",&N,&M,&C1,&C2);
+  for(int i=0;i<N;i++) {
+    scanf("%d",&weight[i]);
+  }
+  int a,b,c;
+  fill(G[0],G[0]+maxn*maxn,INF);
+  for(int i=0;i<M;i++) {
+    scanf("%d %d %d",&a,&b,&c);
+    G[a][b] = c;
+    G[b][a] = c;
+  }
+  dji(C1);
+  printf("%d %d",num[C2],wei[C2]);
+
+
 	return 0;
 }
-
-

@@ -53,24 +53,6 @@ int change(string str) {
     }
 }
 int main() {
-    scanf("%d%d",&N,&K);
-    for(int i=0;i<N;i++) {
-        string name1,name2;
-        int time;
-        cin>>name1>>name2>>time;
-        int id1 = change(name1);
-        int id2 = change(name2);
-        weight[id1] += time;
-        weight[id2] += time;
-        G[id1][id2] += time;
-        G[id2][id1] += time;
-    }
-    dfstrave();
-    cout<<Gang.size()<<endl;
-    map<string,int>::iterator it;
-    for(it=Gang.begin();it!=Gang.end();it++) {
-        cout<<it->first<<" "<<it->second<<endl;
-    }
-
+   
   return 0;
 }
